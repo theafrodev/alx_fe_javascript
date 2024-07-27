@@ -2,6 +2,17 @@ let quoteDisplay = document.getElementById("quoteDisplay");
 
 let newQuote = document.getElementById("newQuote");
 
+let form = document.createElement('div');
+
+form.innerHTML = `
+    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+    <button onclick="addQuote()">Add Quote</button>`;
+
+let body = document.querySelector('body');
+
+let script = document.querySelector('script');
+
 const quotes = [
     {
         text: 'this is a quote',
@@ -29,10 +40,29 @@ function showRandomQuotes(){
     return quoteDisplay.innerHTML = quotes[index].text;
 }
 
+function createAddQuoteForm(){
+    body.insertBefore(form, script);
+}
+
+function addQuote(){
+    let newQuotetext = document.getElementById('newQuoteText').value.trim();
+
+    let newQuoteCategory = document.getElementById('newQuoteCategory').value.trim();
+   
+    quotes.push({text: newQuotetext, category: newQuoteCategory});
+   console.log(quotes);
+}
+
 document.addEventListener("DOMContentLoaded", ()=>{
 
     showRandomQuotes();
 
+    console.log(body);
+
     newQuote.addEventListener('click', ()=>{showRandomQuotes()});
+
+    createAddQuoteForm();
+
+    
 
 });
