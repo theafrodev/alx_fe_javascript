@@ -13,7 +13,7 @@ let body = document.querySelector('body');
 
 let script = document.querySelector('script');
 
-const quotes = [
+let quotes = [
     {
         text: 'this is a quote',
         category: 'this is a quote category 1'
@@ -33,6 +33,8 @@ const quotes = [
 ]
 
 function saveQuotes(){
+    console.log(quotes);
+    
     let saveQuote = JSON.stringify(quotes);
 
     localStorage.setItem('quotes', saveQuote);
@@ -45,7 +47,11 @@ function saveQuotes(){
 function showRandomQuotes(){
     let index = Math.floor(Math.random()*quotes.length);
 
-    let quoteObject = JSON.parse(saveQuotes());
+    let quoteObject = JSON.parse(getQuotes());
+
+    quotes = quoteObject;
+
+    console.log(quotes);
 
     // console.log(quotes[index].text);
 
@@ -71,16 +77,75 @@ function addQuote(){
 
     // let quoteStorage = JSON.stringify(quotes);
 
+    saveQuotes();
+
     console.log(quotes);
 }
 
 function getQuotes(){
-    console.log(localStorage.getItem('quotes'));
+
+    if (localStorage.getItem('quotes')){
+        // console.log(localStorage.getItem('quotes'));
+    }else{
+        saveQuotes();
+        // console.log(localStorage.getItem('quotes'));
+    }
+
+    console.log(JSON.parse(localStorage.getItem('quotes')));
+
     return localStorage.getItem('quotes');
+
 }
+
+function exportQuotes(){
+
+    const link = document.createElement('a');
+
+    const blob = new Blob([JSON.stringify(getQuotes())], { type: 'application/json' });
+
+    link.href = URL.createObjectURL(blob);
+
+    link.download = 'quotes.json';
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+}
+
+function importFromJsonFile(event) {
+    const fileReader = new FileReader();
+    fileReader.onload = function(event) {
+      const importedQuotes = JSON.parse(event.target.result);
+      console.log(importedQuotes);
+      console.log(typeof importedQuotes);
+
+      let checker = JSON.parse(importedQuotes);
+
+      console.log(checker);
+
+      checker.forEach(item => {
+        //console.log(item);
+        quotes.push(item);
+    });
+
+    console.log(quotes);
+    saveQuotes();
+
+      alert('Quotes imported successfully!');
+
+    };
+
+    //console.log(quotes);
+
+    fileReader.readAsText(event.target.files[0]);
+  }
 
 
 document.addEventListener("DOMContentLoaded", ()=>{
+
+    getQuotes();
 
     showRandomQuotes();
 
