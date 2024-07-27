@@ -50,6 +50,13 @@ function addQuote(){
     let newQuoteCategory = document.getElementById('newQuoteCategory').value.trim();
    
     quotes.push({text: newQuotetext, category: newQuoteCategory});
+
+    let addedText = document.createElement('div');
+
+    addedText.textContent = `${newQuotetext} added successfully`;
+
+    quoteDisplay.appendChild(addedText);
+
    console.log(quotes);
 }
 
@@ -62,7 +69,5 @@ document.addEventListener("DOMContentLoaded", ()=>{
     newQuote.addEventListener('click', ()=>{showRandomQuotes()});
 
     createAddQuoteForm();
-
-    
 
 });
