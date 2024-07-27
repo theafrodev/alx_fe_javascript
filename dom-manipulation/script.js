@@ -32,12 +32,24 @@ const quotes = [
     }
 ]
 
+function saveQuotes(){
+    let saveQuote = JSON.stringify(quotes);
+
+    localStorage.setItem('quotes', saveQuote);
+
+    return saveQuote;
+}
+
+
+
 function showRandomQuotes(){
     let index = Math.floor(Math.random()*quotes.length);
 
-    console.log(quotes[index].text);
+    let quoteObject = JSON.parse(saveQuotes());
 
-    return quoteDisplay.innerHTML = quotes[index].text;
+    // console.log(quotes[index].text);
+
+    return quoteDisplay.innerHTML = quoteObject[index].text;
 }
 
 function createAddQuoteForm(){
@@ -57,14 +69,22 @@ function addQuote(){
 
     quoteDisplay.appendChild(addedText);
 
-   console.log(quotes);
+    // let quoteStorage = JSON.stringify(quotes);
+
+    console.log(quotes);
 }
+
+function getQuotes(){
+    console.log(localStorage.getItem('quotes'));
+    return localStorage.getItem('quotes');
+}
+
 
 document.addEventListener("DOMContentLoaded", ()=>{
 
     showRandomQuotes();
 
-    console.log(body);
+    // console.log(body);
 
     newQuote.addEventListener('click', ()=>{showRandomQuotes()});
 
