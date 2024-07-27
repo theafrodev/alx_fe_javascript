@@ -26,7 +26,7 @@ function showRandomQuotes(){
 
     console.log(quotes[index].text);
 
-    return quoteDisplay.textContent = quotes[index].text;
+    return quoteDisplay.innerHTML = quotes[index].text;
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
