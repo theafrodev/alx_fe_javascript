@@ -156,23 +156,16 @@ function importFromJsonFile(event) {
   
   let categoryFilter = document.getElementById('categoryFilter');
 
-  function populateCategories(){
-
-    let categories = [];
-    
-    quotes.forEach((item)=>{
-        categories.push(item.category);
-    });
-
-    categories = [...new Set(categories)]
+  function populateCategories() {
+    let categories = quotes.map(item => item.category);
+    categories = [...new Set(categories)];
 
     console.log('Categories:' + categories);
 
-    categories.forEach((item)=>{
-        categoryFilter.insertAdjacentHTML("beforeend",`<option value=${item}>${item}</option>`);
+    categories.forEach(item => {
+        categoryFilter.insertAdjacentHTML("beforeend", `<option value="${item}">${item}</option>`);
     });
-
-  }
+}
 
   function filterQuotes(option){
 
