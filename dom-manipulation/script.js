@@ -221,39 +221,41 @@ function populateCategories() {
 
 
   // Fetching quotes from the server
-  function fetchQuotesFromServer() {
-    fetch(API_URL)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Fetched from server:', data);
-            const quotesFromServer = data.map(item => ({
-                text: item.body,
-                category: 'server'
-            }));
-            mergeQuotes(quotesFromServer);
-        })
-        .catch(error => console.error('Error fetching quotes from server:', error));
+  async function fetchQuotesFromServer() {
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        console.log('Fetched from server:', data);
+        const quotesFromServer = data.map(item => ({
+            text: item.body,
+            category: 'server'
+        }));
+        mergeQuotes(quotesFromServer);
+    } catch (error) {
+        console.error('Error fetching quotes from server:', error);
+    }
 }
 
 
 // Posting a new quote to the server
-function postQuoteToServer(quote) {
-    fetch(API_URL, {
-        method: 'POST',
-        body: JSON.stringify({
-            title: 'quote',
-            body: quote.text,
-            userId: 1
-        }),
-        headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
+async function postQuoteToServer(quote) {
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                title: 'quote',
+                body: quote.text,
+                userId: 1
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            }
+        });
+        const data = await response.json();
         console.log('Posted to server:', data);
-    })
-    .catch(error => console.error('Error posting quote to server:', error));
+    } catch (error) {
+        console.error('Error posting quote to server:', error);
+    }
 }
 
 // Periodic data sync
