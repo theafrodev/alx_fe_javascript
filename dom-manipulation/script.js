@@ -259,7 +259,7 @@ async function postQuoteToServer(quote) {
 }
 
 // Periodic data sync
-function startDataSync() {
+function syncQuotes() {
     setInterval(fetchQuotesFromServer, 4000);
 }
 
@@ -307,6 +307,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     getFilter(); 
 
-    startDataSync();
+    syncQuotes();
 
 });
