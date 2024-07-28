@@ -1,3 +1,5 @@
+const API_URL = 'https://jsonplaceholder.typicode.com/posts';
+
 let quoteDisplay = document.getElementById("quoteDisplay");
 
 let newQuote = document.getElementById("newQuote");
@@ -156,7 +158,19 @@ function importFromJsonFile(event) {
   
   let categoryFilter = document.getElementById('categoryFilter');
 
-  function populateCategories() {
+//   function populateCategories() {
+//     let categories = quotes.map(item => item.category);
+//     categories = [...new Set(categories)];
+
+//     console.log('Categories:' + categories);
+
+//     categories.forEach(item => {
+//         categoryFilter.insertAdjacentHTML("beforeend", `<option value="${item}">${item}</option>`);
+//     });
+// }
+
+function populateCategories() {
+    categoryFilter.innerHTML = '<option value="All Categories">All Categories</option>'; // Clear existing options first
     let categories = quotes.map(item => item.category);
     categories = [...new Set(categories)];
 
@@ -205,6 +219,65 @@ function importFromJsonFile(event) {
 
   }
 
+
+  // Fetching quotes from the server
+  function fetchQuotesFromServer() {
+    fetch(API_URL)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Fetched from server:', data);
+            const quotesFromServer = data.map(item => ({
+                text: item.body,
+                category: 'server'
+            }));
+            mergeQuotes(quotesFromServer);
+        })
+        .catch(error => console.error('Error fetching quotes from server:', error));
+}
+
+
+// Posting a new quote to the server
+function postQuoteToServer(quote) {
+    fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+            title: 'quote',
+            body: quote.text,
+            userId: 1
+        }),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Posted to server:', data);
+    })
+    .catch(error => console.error('Error posting quote to server:', error));
+}
+
+// Periodic data sync
+function startDataSync() {
+    setInterval(fetchQuotesFromServer, 4000);
+}
+
+// Merge quotes and resolve conflicts (server data takes precedence)
+function mergeQuotes(serverQuotes) {
+    const localQuotes = JSON.parse(getQuotes()) || [];
+    const mergedQuotes = [...serverQuotes, ...localQuotes];
+    const uniqueQuotes = mergedQuotes.filter((quote, index, self) =>
+        index === self.findIndex((q) => q.text === quote.text && q.category === quote.category)
+    );
+    quotes = uniqueQuotes;
+    saveQuotes();
+    populateCategories();
+    console.log('Merged quotes:', quotes);
+}
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", ()=>{
 
     getQuotes();
@@ -231,5 +304,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     });
 
     getFilter(); 
+
+    startDataSync();
 
 });
