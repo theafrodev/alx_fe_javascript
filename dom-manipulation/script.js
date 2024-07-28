@@ -231,8 +231,10 @@ function populateCategories() {
             category: 'server'
         }));
         mergeQuotes(quotesFromServer);
+        showNotification("Quotes synced with server!", "success");
     } catch (error) {
         console.error('Error fetching quotes from server:', error);
+        showNotification("Failed to sync quotes with server. Please try again.", "error");
     }
 }
 
@@ -276,7 +278,15 @@ function mergeQuotes(serverQuotes) {
     console.log('Merged quotes:', quotes);
 }
 
-
+function showNotification(message, type) {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.className = `notification ${type}`;
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 5000); // Hide notification after 5 seconds
+}
 
 
 
