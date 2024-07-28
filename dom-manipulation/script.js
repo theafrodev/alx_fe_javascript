@@ -171,13 +171,15 @@ function importFromJsonFile(event) {
 
     quoteDisplay.innerHTML = '';
 
+    const selectedCategory = option
+
     quotes.forEach((item)=>{
-        if(item.category === option){
+        if(item.category === selectedCategory){
             quoteDisplay.insertAdjacentHTML("beforeend", `<h6>${item.text}</h6>`);
             localStorage.setItem('category', `${item.category}`);
         }else if(option === "All Categories"){
             quoteDisplay.insertAdjacentHTML("beforeend", `<h6>${item.text}</h6>`);
-            localStorage.setItem('category', `${option}`);
+            localStorage.setItem('category', `${selectedCategory}`);
         }
     });
   }
